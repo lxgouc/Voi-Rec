@@ -1,0 +1,30 @@
+#-------------------------------------------------
+#
+# Project created by QtCreator 2018-03-20T11:43:23
+#
+#-------------------------------------------------
+
+QT       += core gui
+
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+TARGET = Voi-Rec
+TEMPLATE = app
+
+
+SOURCES += main.cpp\
+        widget.cpp \
+    speech_recognizer.cpp \
+    linuxrec.cpp
+
+HEADERS  += widget.h \
+    speech_recognizer.h \
+    formats.h \
+    linuxrec.h
+
+FORMS    += widget.ui
+
+INCLUDEPATH    += ./include
+
+LIBS    += -L/home/lxg/workspace/Voi-Rec/libs/x64 -lmsc \
+           -lasound
