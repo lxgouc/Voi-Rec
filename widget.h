@@ -6,10 +6,12 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <QThread>
 #include "qisr.h"
 #include "msp_cmn.h"
 #include "msp_errors.h"
-#include "speech_recognizer.h"
+#include "iatwork.h"
+
 
 #define FRAME_LEN	640
 
@@ -29,11 +31,13 @@ public:
 
     static void show_result(char *string, char is_over);
 
-private slots:
-    void iat_record_sample();
+public slots:
+    void iatexec();
 
 private:
     Ui::Widget *ui;
+    QThread IATthread;
+    Iatwork *iatsample;
 
 };
 

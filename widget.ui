@@ -5,6 +5,14 @@
   <property name="enabled">
    <bool>true</bool>
   </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>490</width>
+    <height>380</height>
+   </rect>
+  </property>
   <property name="minimumSize">
    <size>
     <width>490</width>
@@ -46,8 +54,8 @@
   <widget class="QTextEdit" name="ResultDisplay">
    <property name="geometry">
     <rect>
-     <x>280</x>
-     <y>120</y>
+     <x>180</x>
+     <y>170</y>
      <width>221</width>
      <height>121</height>
     </rect>

@@ -6,6 +6,7 @@
 
 QT       += core gui
 
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = Voi-Rec
@@ -15,12 +16,14 @@ TEMPLATE = app
 SOURCES += main.cpp\
         widget.cpp \
     speech_recognizer.cpp \
-    linuxrec.cpp
+    linuxrec.cpp \
+    iatwork.cpp
 
 HEADERS  += widget.h \
     speech_recognizer.h \
     formats.h \
-    linuxrec.h
+    linuxrec.h \
+    iatwork.h
 
 FORMS    += widget.ui
 
