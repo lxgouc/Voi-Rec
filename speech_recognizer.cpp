@@ -17,7 +17,6 @@
 #include "msp_errors.h"
 #include "linuxrec.h"
 
-
 #define SR_DBGON 1
 #if SR_DBGON == 1
 #	define sr_dbg printf
@@ -50,8 +49,6 @@ enum {
 #define SR_MFREE  free
 #define SR_MEMSET	memset
 
-static char *g_result = NULL;
-static unsigned int g_buffersize = BUFFER_SIZE;
 
 static void Sleep(size_t ms)
 {
@@ -245,7 +242,7 @@ int sr_start_listening(struct speech_rec *sr)
 		return -E_SR_ALREADY;
 	}
 
-	session_id = QISRSessionBegin(NULL, sr->session_begin_params, &errcode); //听写不需要语法，第一个参数为NULL
+    session_id = QISRSessionBegin(NULL, sr->session_begin_params, &errcode);
 	if (MSP_SUCCESS != errcode)
 	{
 		sr_dbg("\nQISRSessionBegin failed! error code:%d\n", errcode);
@@ -377,53 +374,6 @@ void sr_uninit(struct speech_rec * sr)
 	}
 }
 
-void show_result(char *string, char is_over)
-{
-    printf("\rResult: [ %s ]", string);
-    if(is_over)
-        putchar('\n');
-}
-
-void on_result(const char *result, char is_last)
-{
-    if (result) {
-        size_t left = g_buffersize - 1 - strlen(g_result);
-        size_t size = strlen(result);
-        if (left < size) {
-            g_result = (char*)realloc(g_result, g_buffersize + BUFFER_SIZE);
-            if (g_result)
-                g_buffersize += BUFFER_SIZE;
-            else {
-                printf("mem alloc failed\n");
-                return;
-            }
-        }
-        strncat(g_result, result, size);
-        show_result(g_result, is_last);
-    }
-}
-
-void on_speech_begin()
-{
-    if (g_result)
-    {
-        free(g_result);
-    }
-    g_result = (char*)malloc(BUFFER_SIZE);
-    g_buffersize = BUFFER_SIZE;
-    memset(g_result, 0, g_buffersize);
-
-    printf("Start Listening...\n");
-}
-
-void on_speech_end(int reason)
-{
-    if (reason == END_REASON_VAD_DETECT)
-        printf("\nSpeaking done \n");
-    else
-        printf("\nRecognizer error %d\n", reason);
-}
-
 void demo_mic(const char* session_begin_params)
 {
     int errcode;
@@ -456,3 +406,54 @@ void demo_mic(const char* session_begin_params)
 
     sr_uninit(&iat);
 }
+
+void on_result(const char *result, char is_last)
+{
+    if (result) {
+        size_t left = g_buffersize - 1 - strlen(g_result);
+        size_t size = strlen(result);
+        if (left < size) {
+            g_result = (char*)realloc(g_result, g_buffersize + BUFFER_SIZE);
+            if (g_result)
+                g_buffersize += BUFFER_SIZE;
+            else {
+                printf("mem alloc failed\n");
+                return;
+            }
+        }
+        strncat(g_result, result, size);
+        show_result(g_result, is_last);
+    }
+}
+
+void show_result(char *string, char is_over)
+{
+    printf("\rResult: [ %s ]", string);
+    QString redata=QString(QLatin1String(string));
+    if(is_over)
+        putchar('\n');
+}
+
+
+void on_speech_begin()
+{
+    if (g_result)
+    {
+        free(g_result);
+    }
+    g_result = (char*)malloc(BUFFER_SIZE);
+    g_buffersize = BUFFER_SIZE;
+    memset(g_result, 0, g_buffersize);
+
+    printf("Start Listening...\n");
+}
+
+void on_speech_end(int reason)
+{
+    if (reason == END_REASON_VAD_DETECT)
+        printf("\nSpeaking done \n");
+    else
+        printf("\nRecognizer error %d\n", reason);
+}
+
+

@@ -26,6 +26,7 @@ void Widget::iatthreadinit()
      connect(&IATthread,SIGNAL(started()),iatsample,SLOT(iat_record_sample()));
      connect(&IATthread,SIGNAL(finished()),iatsample,SLOT(deleteLater()));
      connect(iatsample,SIGNAL(statedata(const QString&)),this,SLOT(showstatedata(const QString&)));
+
 }
 
 void Widget::iatexec()
@@ -38,7 +39,6 @@ void Widget::iatexec()
     }
     else
     {
-        //disconnect(&IATthread,SIGNAL(started()),iatsample,SLOT(iat_record_sample()));
         IATthread.quit();
         IATthread.wait();
         ui->IATButton->setText("IAT ON");
@@ -47,7 +47,7 @@ void Widget::iatexec()
 
 }
 
-void Widget::showstatedata(const QString &statedata)
+void Widget::showdata(const QString &statedata)
 {
 
     //IATthread.quit();

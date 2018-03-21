@@ -9,6 +9,8 @@
 #ifndef SPEECH_RECOGNIZER_H
 #define SPEECH_RECOGNIZER_H
 
+#include <QString>
+
 enum sr_audsrc
 {
 	SR_MIC,	/* write data from mic */
@@ -16,6 +18,7 @@ enum sr_audsrc
 };
 
 //#define DEFAULT_INPUT_DEVID     (-1)
+
 #define	BUFFER_SIZE	4096
 
 #define E_SR_NOACTIVEDEVICE		1
@@ -24,13 +27,19 @@ enum sr_audsrc
 #define E_SR_RECORDFAIL			4
 #define E_SR_ALREADY			5
 
-struct speech_rec_notifier {
-	void (*on_result)(const char *result, char is_last);
-	void (*on_speech_begin)();
-	void (*on_speech_end)(int reason);	/* 0 if VAD.  others, error : see E_SR_xxx and msp_errors.h  */
-};
-
 #define END_REASON_VAD_DETECT	0	/* detected speech done  */
+
+
+static char *g_result = NULL;
+static unsigned int g_buffersize = BUFFER_SIZE;
+
+extern QString redata;
+
+struct speech_rec_notifier {
+    void (*on_result)(const char *result, char is_last);
+    void (*on_speech_begin)();
+    void (*on_speech_end)(int reason);	/* 0 if VAD.  others, error : see E_SR_xxx and msp_errors.h  */
+};
 
 struct speech_rec {
 	enum sr_audsrc aud_src;  /* from mic or manual  stream write */
@@ -58,8 +67,11 @@ int sr_stop_listening(struct speech_rec *sr);
 int sr_write_audio_data(struct speech_rec *sr, char *data, unsigned int len);
 /* must call uninit after you don't use it */
 void sr_uninit(struct speech_rec * sr);
-void show_result(char *string, char is_over);
 void demo_mic(const char* session_begin_params);
+void show_result(char *string, char is_over);
+void on_result(const char *result, char is_last);
+void on_speech_end(int reason);
+void on_speech_begin();
 #ifdef __cplusplus
 } /* extern "C" */	
 #endif /* C++ */

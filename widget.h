@@ -12,8 +12,9 @@
 #include "msp_errors.h"
 #include "iatwork.h"
 
-
 #define FRAME_LEN	640
+
+extern QString redata;
 
 namespace Ui {
 class Widget;
@@ -36,7 +37,10 @@ public:
 public slots:
     void iatexec();
 
-    void showstatedata(const QString &statedata);
+    void showdata(const QString &statedata);
+
+public:
+
 
 private:
     Ui::Widget *ui;
