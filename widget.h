@@ -31,6 +31,8 @@ public:
 
     static void show_result(char *string, char is_over);
 
+    void iatthreadinit();
+
 public slots:
     void iatexec();
 
@@ -39,7 +41,6 @@ public slots:
 private:
     Ui::Widget *ui;
     QThread IATthread;
-    Iatwork *iatsample;
 
 };
 

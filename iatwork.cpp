@@ -1,5 +1,6 @@
 #include "iatwork.h"
 #include "speech_recognizer.h"
+#include <QDebug>
 
 Iatwork::Iatwork(QObject *parent) : QObject(parent)
 {
@@ -13,6 +14,7 @@ Iatwork::~Iatwork()
 
 void Iatwork::iat_record_sample()
 {
+    qDebug()<<"lxg";
     int ret = MSP_SUCCESS;
         int upload_on =	1; /* whether upload the user word */
         /* login params, please do keep the appid correct */
@@ -50,8 +52,9 @@ void Iatwork::iat_record_sample()
         */
             emit statedata("Demo recognizing the speech from microphone\n");
             emit statedata("Speak in 15 seconds\n");
-
+            qDebug()<<"lll";
             demo_mic(session_begin_params);
+            qDebug()<<"222";
 
             emit statedata("15 sec passed\n");
     exit:

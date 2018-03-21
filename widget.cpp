@@ -1,19 +1,15 @@
 #include "widget.h"
 #include "ui_widget.h"
-
+#include <QDebug>
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Widget)
 {
     ui->setupUi(this);
-    iatsample=new Iatwork;
-    iatsample->moveToThread(&IATthread);
     connect(ui->IATButton,SIGNAL(clicked()),this,SLOT(iatexec()));
     //connect(ui->***Button,SIGNAL(clicked()),this,SLOT(***exec()));
     //connect(ui->***Button,SIGNAL(clicked()),this,SLOT(***exec()));
-    connect(iatsample,SIGNAL(statedata(const QString&)),this,SLOT(showstatedata(const QString&)));
-    connect(&IATthread,SIGNAL(finished()),iatsample,SLOT(deleteLater()));
 }
 
 Widget::~Widget()
@@ -23,17 +19,39 @@ Widget::~Widget()
     IATthread.wait();
 }
 
+void Widget::iatthreadinit()
+{
+     Iatwork *iatsample=new Iatwork;
+     iatsample->moveToThread(&IATthread);
+     connect(&IATthread,SIGNAL(started()),iatsample,SLOT(iat_record_sample()));
+     connect(&IATthread,SIGNAL(finished()),iatsample,SLOT(deleteLater()));
+     connect(iatsample,SIGNAL(statedata(const QString&)),this,SLOT(showstatedata(const QString&)));
+}
+
 void Widget::iatexec()
 {
-    connect(&IATthread,SIGNAL(started()),iatsample,SLOT(iat_record_sample()));
-    IATthread.start();
+    if(ui->IATButton->text()=="IAT ON")
+    {
+       iatthreadinit();
+       IATthread.start();
+       ui->IATButton->setText("IAT OFF");
+    }
+    else
+    {
+        //disconnect(&IATthread,SIGNAL(started()),iatsample,SLOT(iat_record_sample()));
+        IATthread.quit();
+        IATthread.wait();
+        ui->IATButton->setText("IAT ON");
+        ui->StateDisplay->clear();
+    }
+
 }
 
 void Widget::showstatedata(const QString &statedata)
 {
 
-    IATthread.quit();
-    IATthread.wait();
+    //IATthread.quit();
+    //IATthread.wait();
 }
 
 int Widget::upload_userwords()

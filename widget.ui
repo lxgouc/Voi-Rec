@@ -38,7 +38,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>IAT</string>
+    <string>IAT ON</string>
    </property>
   </widget>
   <widget class="QTextEdit" name="StateDisplay">
