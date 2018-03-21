@@ -48,12 +48,12 @@ void Iatwork::iat_record_sample()
             printf("Uploaded successfully\n");
         }
         */
-            printf("Demo recognizing the speech from microphone\n");
-            printf("Speak in 15 seconds\n");
+            emit statedata("Demo recognizing the speech from microphone\n");
+            emit statedata("Speak in 15 seconds\n");
 
             demo_mic(session_begin_params);
 
-            printf("15 sec passed\n");
+            emit statedata("15 sec passed\n");
     exit:
         MSPLogout(); // Logout...
 }

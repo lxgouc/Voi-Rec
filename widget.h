@@ -34,6 +34,8 @@ public:
 public slots:
     void iatexec();
 
+    void showstatedata(const QString &statedata);
+
 private:
     Ui::Widget *ui;
     QThread IATthread;

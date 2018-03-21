@@ -6,6 +6,8 @@
 @date		2016/05/27
 */
 
+#ifndef SPEECH_RECOGNIZER_H
+#define SPEECH_RECOGNIZER_H
 
 enum sr_audsrc
 {
@@ -61,3 +63,5 @@ void demo_mic(const char* session_begin_params);
 #ifdef __cplusplus
 } /* extern "C" */	
 #endif /* C++ */
+
+#endif
