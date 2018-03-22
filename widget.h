@@ -11,10 +11,12 @@
 #include "msp_cmn.h"
 #include "msp_errors.h"
 #include "iatwork.h"
+#include "speech_recognizer.h"
 
-#define FRAME_LEN	640
+#define FRAME_LEN	640;
 
-extern QString redata;
+
+
 
 namespace Ui {
 class Widget;
@@ -37,10 +39,9 @@ public:
 public slots:
     void iatexec();
 
-    void showdata(const QString &statedata);
+    void showdata();
 
 public:
-
 
 private:
     Ui::Widget *ui;

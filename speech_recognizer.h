@@ -30,10 +30,7 @@ enum sr_audsrc
 #define END_REASON_VAD_DETECT	0	/* detected speech done  */
 
 
-static char *g_result = NULL;
-static unsigned int g_buffersize = BUFFER_SIZE;
-
-extern QString redata;
+extern char *redata;
 
 struct speech_rec_notifier {
     void (*on_result)(const char *result, char is_last);

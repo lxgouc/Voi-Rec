@@ -17,6 +17,11 @@
 #include "msp_errors.h"
 #include "linuxrec.h"
 
+static char *g_result = NULL;
+static unsigned int g_buffersize = BUFFER_SIZE;
+
+char* redata;
+
 #define SR_DBGON 1
 #if SR_DBGON == 1
 #	define sr_dbg printf
@@ -429,7 +434,7 @@ void on_result(const char *result, char is_last)
 void show_result(char *string, char is_over)
 {
     printf("\rResult: [ %s ]", string);
-    QString redata=QString(QLatin1String(string));
+    redata=string;
     if(is_over)
         putchar('\n');
 }
