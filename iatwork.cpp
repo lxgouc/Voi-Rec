@@ -16,10 +16,10 @@ void Iatwork::iat_record_sample()
 {
     qDebug()<<"lxg";
     int ret = MSP_SUCCESS;
-        int upload_on =	1; /* whether upload the user word */
+        //int upload_on =	1; /* whether upload the user word */
         /* login params, please do keep the appid correct */
         const char* login_params = "appid = 593fcb2f, work_dir = .";
-        int aud_src = 0; /* from mic or file */
+        //int aud_src = 0; /* from mic or file */
 
         /*
         * See "iFlytek MSC Reference Manual"
@@ -50,13 +50,13 @@ void Iatwork::iat_record_sample()
             printf("Uploaded successfully\n");
         }
         */
-            emit statedata("Demo recognizing the speech from microphone\n");
-            emit statedata("Speak in 15 seconds\n");
+            //emit statedata("Demo recognizing the speech from microphone\n");
+            //emit statedata("Speak in 15 seconds\n");
             qDebug()<<"lll";
             demo_mic(session_begin_params);
             qDebug()<<"222";
-
-            emit statedata("15 sec passed\n");
+         qDebug()<<"logout";
     exit:
-        MSPLogout(); // Logout...
+        MSPLogout();
+        emit taskdone();// Logout...
 }

@@ -16,6 +16,8 @@ public:
 signals:
     void statedata(const QString&);
 
+    void taskdone();
+
 public slots:
     void iat_record_sample();
 

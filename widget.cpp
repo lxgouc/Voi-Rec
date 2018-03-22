@@ -24,8 +24,8 @@ void Widget::iatthreadinit()
      Iatwork *iatsample=new Iatwork;
      iatsample->moveToThread(&IATthread);
      connect(&IATthread,SIGNAL(started()),iatsample,SLOT(iat_record_sample()));
-     connect(&IATthread,SIGNAL(finished()),this,SLOT(showdata()));
      connect(&IATthread,SIGNAL(finished()),iatsample,SLOT(deleteLater()));
+     connect(iatsample,SIGNAL(taskdone()),this,SLOT(showdata()));
 }
 
 void Widget::iatexec()
@@ -49,8 +49,9 @@ void Widget::iatexec()
 void Widget::showdata()
 {
     ui->ResultDisplay->setText(QString(redata));
-    //IATthread.quit();
-    //IATthread.wait();
+    ui->IATButton->setText("IAT ON");
+    IATthread.quit();
+    IATthread.wait();
 }
 
 int Widget::upload_userwords()
