@@ -45,7 +45,7 @@ signals:
     void ttstaskdone();
 
 public slots:
-    void tts_sample(QString plaintext);
+    void tts_sample(const QString plaintext);
 
 private:
     wave_pcm_hdr default_wav_hdr =

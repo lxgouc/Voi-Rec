@@ -35,7 +35,7 @@ void Widget::ttsthreadinit()
     ttssample->moveToThread(&samplethread);
     connect(&samplethread,SIGNAL(started()),this,SLOT(gettext()));
     connect(&samplethread,SIGNAL(finished()),ttssample,SLOT(deleteLater()));
-    connect(this,SIGNAL(plaintext(QString)),ttssample,SLOT(tts_sample(QString)));
+    connect(this,SIGNAL(plaintext(const QString)),ttssample,SLOT(tts_sample(const QString)));
     connect(ttssample,SIGNAL(ttstaskdone()),this,SLOT(playaudio()));
 }
 
@@ -76,7 +76,7 @@ void Widget::ttsexec()
 
 void Widget::gettext()
 {
-    QString text=ui->StateDisplay->toPlainText();
+    const QString text=ui->StateDisplay->toPlainText();
     emit plaintext(text);
 }
 
@@ -92,9 +92,7 @@ void Widget::playaudio()
 {
     samplethread.quit();
     samplethread.wait();
-    QSound *audio=new QSound("/home/lxg/ouc/Voi-Rec/audio.wav");
-    audio->setLoops(100);
-    audio->play();
+    QSound::play("/home/lxg/ouc/Voi-Rec/audio.wav");
     ui->TTSButton->setText("TTS ON");
 }
 

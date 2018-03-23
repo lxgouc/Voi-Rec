@@ -6,7 +6,7 @@ Ttswork::Ttswork(QObject *parent) : QObject(parent)
 }
 
 
-void Ttswork::tts_sample(QString plaintext)
+void Ttswork::tts_sample(const QString plaintext)
 {
     int         ret                  = MSP_SUCCESS;
         const char* login_params         = "appid = 593fcb2f, work_dir = .";//登录参数,appid与msc库绑定,请勿随意改动
