@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += multimedia
 
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -17,13 +18,15 @@ SOURCES += main.cpp\
         widget.cpp \
     speech_recognizer.cpp \
     linuxrec.cpp \
-    iatwork.cpp
+    iatwork.cpp \
+    ttswork.cpp
 
 HEADERS  += widget.h \
     speech_recognizer.h \
     formats.h \
     linuxrec.h \
-    iatwork.h
+    iatwork.h \
+    ttswork.h
 
 FORMS    += widget.ui
 

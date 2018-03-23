@@ -433,7 +433,7 @@ void on_result(const char *result, char is_last)
 
 void show_result(char *string, char is_over)
 {
-    printf("\rResult: [ %s ]", string);
+    //printf("\rResult: [ %s ]", string);
     redata=string;
     if(is_over)
         putchar('\n');

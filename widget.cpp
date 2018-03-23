@@ -1,6 +1,7 @@
 #include "widget.h"
 #include "ui_widget.h"
 #include <QDebug>
+#include <QSound>
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
@@ -8,24 +9,34 @@ Widget::Widget(QWidget *parent) :
 {
     ui->setupUi(this);
     connect(ui->IATButton,SIGNAL(clicked()),this,SLOT(iatexec()));
-    //connect(ui->***Button,SIGNAL(clicked()),this,SLOT(***exec()));
+    connect(ui->TTSButton,SIGNAL(clicked()),this,SLOT(ttsexec()));
     //connect(ui->***Button,SIGNAL(clicked()),this,SLOT(***exec()));
 }
 
 Widget::~Widget()
 {
     delete ui;
-    IATthread.quit();
-    IATthread.wait();
+    samplethread.quit();
+    samplethread.wait();
 }
 
 void Widget::iatthreadinit()
 {
      Iatwork *iatsample=new Iatwork;
-     iatsample->moveToThread(&IATthread);
-     connect(&IATthread,SIGNAL(started()),iatsample,SLOT(iat_record_sample()));
-     connect(&IATthread,SIGNAL(finished()),iatsample,SLOT(deleteLater()));
-     connect(iatsample,SIGNAL(taskdone()),this,SLOT(showdata()));
+     iatsample->moveToThread(&samplethread);
+     connect(&samplethread,SIGNAL(started()),iatsample,SLOT(iat_record_sample()));
+     connect(&samplethread,SIGNAL(finished()),iatsample,SLOT(deleteLater()));
+     connect(iatsample,SIGNAL(iattaskdone()),this,SLOT(showdata()));
+}
+
+void Widget::ttsthreadinit()
+{
+    Ttswork *ttssample=new Ttswork;
+    ttssample->moveToThread(&samplethread);
+    connect(&samplethread,SIGNAL(started()),this,SLOT(gettext()));
+    connect(&samplethread,SIGNAL(finished()),ttssample,SLOT(deleteLater()));
+    connect(this,SIGNAL(plaintext(QString)),ttssample,SLOT(tts_sample(QString)));
+    connect(ttssample,SIGNAL(ttstaskdone()),this,SLOT(playaudio()));
 }
 
 void Widget::iatexec()
@@ -33,25 +44,58 @@ void Widget::iatexec()
     if(ui->IATButton->text()=="IAT ON")
     {
        iatthreadinit();
-       IATthread.start();
+       samplethread.start();
        ui->IATButton->setText("IAT OFF");
     }
     else
     {
-        IATthread.quit();
-        IATthread.wait();
+        samplethread.quit();
+        samplethread.wait();
         ui->IATButton->setText("IAT ON");
         ui->StateDisplay->clear();
     }
 
 }
 
+void Widget::ttsexec()
+{if(ui->TTSButton->text()=="TTS ON")
+    {
+       ttsthreadinit();
+       samplethread.start();
+       ui->TTSButton->setText("TTS OFF");
+    }
+    else
+    {
+        samplethread.quit();
+        samplethread.wait();
+        ui->TTSButton->setText("TTS ON");
+        ui->StateDisplay->clear();
+    }
+
+}
+
+void Widget::gettext()
+{
+    QString text=ui->StateDisplay->toPlainText();
+    emit plaintext(text);
+}
+
 void Widget::showdata()
 {
     ui->ResultDisplay->setText(QString(redata));
     ui->IATButton->setText("IAT ON");
-    IATthread.quit();
-    IATthread.wait();
+    samplethread.quit();
+    samplethread.wait();
+}
+
+void Widget::playaudio()
+{
+    samplethread.quit();
+    samplethread.wait();
+    QSound *audio=new QSound("/home/lxg/ouc/Voi-Rec/audio.wav");
+    audio->setLoops(100);
+    audio->play();
+    ui->TTSButton->setText("TTS ON");
 }
 
 int Widget::upload_userwords()

@@ -11,6 +11,7 @@
 #include "msp_cmn.h"
 #include "msp_errors.h"
 #include "iatwork.h"
+#include "ttswork.h"
 #include "speech_recognizer.h"
 
 #define FRAME_LEN	640;
@@ -36,16 +37,27 @@ public:
 
     void iatthreadinit();
 
+    void ttsthreadinit();
+
 public slots:
     void iatexec();
 
     void showdata();
 
+    void ttsexec();
+
+    void gettext();
+
+    void playaudio();
+
+signals:
+    void plaintext(const QString plaintext);
+
 public:
 
 private:
     Ui::Widget *ui;
-    QThread IATthread;
+    QThread samplethread;
 
 };
 

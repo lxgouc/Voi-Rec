@@ -58,5 +58,5 @@ void Iatwork::iat_record_sample()
          qDebug()<<"logout";
     exit:
         MSPLogout();
-        emit taskdone();// Logout...
+        emit iattaskdone();// Logout...
 }
