@@ -50,6 +50,8 @@ public slots:
 
     void playaudio();
 
+    void getstatedata(const QString);
+
 signals:
     void plaintext(const QString plaintext);
 

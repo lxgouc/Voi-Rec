@@ -42,6 +42,8 @@ public:
     int text_to_speech(const char* src_text, const char* des_path, const char* params);
 
 signals:
+    void statedata(const QString);
+
     void ttstaskdone();
 
 public slots:

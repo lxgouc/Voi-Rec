@@ -23,7 +23,6 @@ void Ttswork::tts_sample(const QString plaintext)
         const char* session_begin_params = "engine_type = local,voice_name=xiaoyan, text_encoding = UTF8, tts_res_path = fo|/home/lxg/ouc/Voi-Rec/bin/msc/res/tts/xiaoyan.jet;fo|/home/lxg/ouc/Voi-Rec/bin/msc/res/tts/common.jet, sample_rate = 16000, speed = 50, volume = 50, pitch = 50, rdn = 2";
         const char* filename             = "/home/lxg/ouc/Voi-Rec/audio.wav"; //合成的语音文件名称
         const char* text                 = plaintext.toStdString().c_str();
-        printf("%s\n",text);
         /* 用户登录 */
         ret = MSPLogin(NULL, NULL, login_params); //第一个参数是用户名，第二个参数是密码，第三个参数是登录参数，用户名和密码可在http://www.xfyun.cn注册获取
         if (MSP_SUCCESS != ret)
@@ -39,17 +38,15 @@ void Ttswork::tts_sample(const QString plaintext)
         //printf("###########################################################################\n\n");
 
         /* 文本合成 */
-        printf("开始合成 ...\n");
+        emit statedata(tr("开始合成 ..."));
         ret = text_to_speech(text, filename, session_begin_params);
         if (MSP_SUCCESS != ret)
         {
             printf("text_to_speech failed, error code: %d.\n", ret);
         }
-        printf("合成完毕\n");
+        emit statedata(tr("合成完毕!"));
 
     exit:
-        //printf("按任意键退出 ...\n");
-        //getchar();
         MSPLogout();
         emit ttstaskdone();
 
@@ -92,7 +89,7 @@ int Ttswork::text_to_speech(const char* src_text, const char* des_path, const ch
         fclose(fp);
         return ret;
     }
-    printf("正在合成 ...\n");
+    emit statedata(tr("正在合成 ..."));
     fwrite(&wav_hdr, sizeof(wav_hdr) ,1, fp); //添加wav音频头，使用采样率为16000
     while (1)
     {
@@ -102,14 +99,12 @@ int Ttswork::text_to_speech(const char* src_text, const char* des_path, const ch
             break;
         if (NULL != data)
         {
-            printf("have audio\n");
             fwrite(data, audio_len, 1, fp);
             wav_hdr.data_size += audio_len; //计算data_size大小
         }
         if (MSP_TTS_FLAG_DATA_END == synth_status)
             break;
     }
-    printf("\n");
     if (MSP_SUCCESS != ret)
     {
         printf("QTTSAudioGet failed, error code: %d.\n",ret);

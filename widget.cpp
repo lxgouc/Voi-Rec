@@ -36,6 +36,7 @@ void Widget::ttsthreadinit()
     connect(&samplethread,SIGNAL(started()),this,SLOT(gettext()));
     connect(&samplethread,SIGNAL(finished()),ttssample,SLOT(deleteLater()));
     connect(this,SIGNAL(plaintext(const QString)),ttssample,SLOT(tts_sample(const QString)));
+    connect(ttssample,SIGNAL(statedata(const QString)),this,SLOT(getstatedata(const QString)));
     connect(ttssample,SIGNAL(ttstaskdone()),this,SLOT(playaudio()));
 }
 
@@ -76,7 +77,7 @@ void Widget::ttsexec()
 
 void Widget::gettext()
 {
-    const QString text=ui->StateDisplay->toPlainText();
+    const QString text=ui->ResultDisplay->toPlainText();
     emit plaintext(text);
 }
 
@@ -86,6 +87,12 @@ void Widget::showdata()
     ui->IATButton->setText("IAT ON");
     samplethread.quit();
     samplethread.wait();
+}
+
+void Widget::getstatedata(const QString statedata)
+{
+    //ui->StateDisplay->clear();
+    ui->StateDisplay->append(statedata);
 }
 
 void Widget::playaudio()
