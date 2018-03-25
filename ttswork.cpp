@@ -1,4 +1,5 @@
 #include "ttswork.h"
+#include <QDebug>
 
 Ttswork::Ttswork(QObject *parent) : QObject(parent)
 {
@@ -6,7 +7,7 @@ Ttswork::Ttswork(QObject *parent) : QObject(parent)
 }
 
 
-void Ttswork::tts_sample(const QString plaintext)
+void Ttswork::tts_sample(const QString src_text)
 {
     int         ret                  = MSP_SUCCESS;
         const char* login_params         = "appid = 593fcb2f, work_dir = .";//登录参数,appid与msc库绑定,请勿随意改动
@@ -22,8 +23,11 @@ void Ttswork::tts_sample(const QString plaintext)
         */
         const char* session_begin_params = "engine_type = local,voice_name=xiaoyan, text_encoding = UTF8, tts_res_path = fo|/home/lxg/ouc/Voi-Rec/bin/msc/res/tts/xiaoyan.jet;fo|/home/lxg/ouc/Voi-Rec/bin/msc/res/tts/common.jet, sample_rate = 16000, speed = 50, volume = 50, pitch = 50, rdn = 2";
         const char* filename             = "/home/lxg/ouc/Voi-Rec/audio.wav"; //合成的语音文件名称
-        const char* text                 = plaintext.toStdString().c_str();
         /* 用户登录 */
+        qDebug()<<src_text;
+        string str=src_text.toStdString();
+        const char *text=str.c_str();
+        qDebug()<<text;
         ret = MSPLogin(NULL, NULL, login_params); //第一个参数是用户名，第二个参数是密码，第三个参数是登录参数，用户名和密码可在http://www.xfyun.cn注册获取
         if (MSP_SUCCESS != ret)
         {
@@ -32,7 +36,7 @@ void Ttswork::tts_sample(const QString plaintext)
         }
 
         //printf("\n###########################################################################\n");
-        //printf("## 语音合成（Text To Speech，TTS）技术能够自动将任意文字实时转换为连续的 ##\n");
+        //printf("## 成语音合（Text To Speech，TTS）技术能够自动将任意文字实时转换为连续的 ##\n");
         //printf("## 自然语音，是一种能够在任何时间、任何地点，向任何人提供语音信息服务的  ##\n");
         //printf("## 高效便捷手段，非常符合信息时代海量数据、动态更新和个性化查询的需求。  ##\n");
         //printf("###########################################################################\n\n");
@@ -60,14 +64,13 @@ int Ttswork::text_to_speech(const char* src_text, const char* des_path, const ch
     unsigned int audio_len    = 0;
     wave_pcm_hdr wav_hdr      = default_wav_hdr;
     int          synth_status = MSP_TTS_FLAG_STILL_HAVE_DATA;
-
     if (NULL == src_text || NULL == des_path)
     {
         printf("params is error!\n");
         return ret;
     }
+    qDebug()<<src_text<<"two";
     fp = fopen(des_path, "wb");
-
     if (NULL == fp)
     {
         printf("open %s error.\n", des_path);
@@ -81,6 +84,7 @@ int Ttswork::text_to_speech(const char* src_text, const char* des_path, const ch
         fclose(fp);
         return ret;
     }
+    qDebug()<<src_text<<"three";
     ret = QTTSTextPut(sessionID, src_text, (unsigned int)strlen(src_text), NULL);
     if (MSP_SUCCESS != ret)
     {
@@ -90,7 +94,7 @@ int Ttswork::text_to_speech(const char* src_text, const char* des_path, const ch
         return ret;
     }
     emit statedata(tr("正在合成 ..."));
-    fwrite(&wav_hdr, sizeof(wav_hdr) ,1, fp); //添加wav音频头，使用采样率为16000
+    fwrite(&wav_hdr, sizeof(wav_hdr) ,1, fp); //添加wav频头，使用采样率为16000
     while (1)
     {
         /* 获取合成音频 */

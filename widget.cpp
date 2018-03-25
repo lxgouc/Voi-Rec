@@ -24,7 +24,7 @@ void Widget::iatthreadinit()
 {
      Iatwork *iatsample=new Iatwork;
      iatsample->moveToThread(&samplethread);
-     connect(&samplethread,SIGNAL(started()),iatsample,SLOT(iat_record_sample()));
+     connect(&samplethread,SIGNAL(started()),iatsample,SLOT(iat_record_sample()),Qt::UniqueConnection);
      connect(&samplethread,SIGNAL(finished()),iatsample,SLOT(deleteLater()));
      connect(iatsample,SIGNAL(iattaskdone()),this,SLOT(showdata()));
 }
@@ -33,11 +33,11 @@ void Widget::ttsthreadinit()
 {
     Ttswork *ttssample=new Ttswork;
     ttssample->moveToThread(&samplethread);
-    connect(&samplethread,SIGNAL(started()),this,SLOT(gettext()));
+    connect(&samplethread,SIGNAL(started()),this,SLOT(gettext()),Qt::UniqueConnection);
     connect(&samplethread,SIGNAL(finished()),ttssample,SLOT(deleteLater()));
-    connect(this,SIGNAL(plaintext(const QString)),ttssample,SLOT(tts_sample(const QString)));
-    connect(ttssample,SIGNAL(statedata(const QString)),this,SLOT(getstatedata(const QString)));
-    connect(ttssample,SIGNAL(ttstaskdone()),this,SLOT(playaudio()));
+    connect(this,SIGNAL(plaintext(const QString)),ttssample,SLOT(tts_sample(const QString)),Qt::UniqueConnection);
+    connect(ttssample,SIGNAL(statedata(const QString)),this,SLOT(getstatedata(const QString)),Qt::UniqueConnection);
+    connect(ttssample,SIGNAL(ttstaskdone()),this,SLOT(playaudio()),Qt::UniqueConnection);
 }
 
 void Widget::iatexec()
@@ -61,6 +61,7 @@ void Widget::iatexec()
 void Widget::ttsexec()
 {if(ui->TTSButton->text()=="TTS ON")
     {
+       ui->StateDisplay->clear();
        ttsthreadinit();
        samplethread.start();
        ui->TTSButton->setText("TTS OFF");
@@ -70,7 +71,6 @@ void Widget::ttsexec()
         samplethread.quit();
         samplethread.wait();
         ui->TTSButton->setText("TTS ON");
-        ui->StateDisplay->clear();
     }
 
 }
@@ -91,8 +91,8 @@ void Widget::showdata()
 
 void Widget::getstatedata(const QString statedata)
 {
-    //ui->StateDisplay->clear();
     ui->StateDisplay->append(statedata);
+
 }
 
 void Widget::playaudio()

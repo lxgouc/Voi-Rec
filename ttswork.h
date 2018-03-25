@@ -6,9 +6,11 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
+#include <string>
 #include "qtts.h"
 #include "msp_cmn.h"
 #include "msp_errors.h"
+using namespace std;
 
 typedef int SR_DWORD;
 typedef short int SR_WORD ;
@@ -47,7 +49,7 @@ signals:
     void ttstaskdone();
 
 public slots:
-    void tts_sample(const QString plaintext);
+    void tts_sample(const QString);
 
 private:
     wave_pcm_hdr default_wav_hdr =

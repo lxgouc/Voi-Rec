@@ -16,9 +16,6 @@
 
 #define FRAME_LEN	640;
 
-
-
-
 namespace Ui {
 class Widget;
 }
@@ -53,7 +50,7 @@ public slots:
     void getstatedata(const QString);
 
 signals:
-    void plaintext(const QString plaintext);
+    void plaintext(const QString);
 
 public:
 
